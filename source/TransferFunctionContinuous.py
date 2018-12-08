@@ -1,6 +1,9 @@
 import TransferFunction
 
-class TransferFunctionContinuous(TransferFunction.TransferDunction):
+class TransferFunctionContinuous(TransferFunction.TransferFunction):
+
+    def __init__(self, numerator, denumerator):
+        TransferFunction.TransferFunction.__init__(self, numerator, denumerator)
 
     def bode(self):
         pass
