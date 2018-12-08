@@ -1,4 +1,5 @@
 import numpy as np
+import scipy as sp
 import abc
 
 class LTIObject(object):
@@ -12,7 +13,19 @@ class LTIObject(object):
     def nyquist(self):
         pass
 
+    @abc.abstractmethod
+    def printSystem(self):
+        pass
+
     # Static methods
     @staticmethod
     def serial():
+        pass
+
+    @staticmethod
+    def parallel():
+        pass
+
+    @staticmethod
+    def feedback():
         pass
