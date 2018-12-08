@@ -11,3 +11,8 @@ class LTIObject(object):
     @abc.abstractmethod
     def nyquist(self):
         pass
+
+    # Static methods
+    @staticmethod
+    def serial():
+        pass
