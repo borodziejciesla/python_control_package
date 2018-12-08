@@ -7,4 +7,7 @@ class TransferFunction(LTIObject.LTIObject):
         self.denumerator = denumerator
 
     def printSystem(self):
+        print('Numerator:')
         print(self.numerator)
+        print('Denumerator:')
+        print(self.denumerator)

@@ -6,7 +6,7 @@ class TestLTISystem(unittest.TestCase):
         self.assertEqual('foo'.upper(), 'FOO')
 
     def test_decrement(self):
-        self.assertEqual(3, 4)
+        self.assertEqual(3,3 )
 
 if __name__ == '__main__':
     unittest.main()
