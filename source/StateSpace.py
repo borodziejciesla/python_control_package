@@ -1,4 +1,4 @@
-import LTIObject
+import source.LTIObject as LTIObject
 
 class StateSpace(LTIObject.LTIObject):
     
@@ -17,3 +17,15 @@ class StateSpace(LTIObject.LTIObject):
         print(self.C)
         print('Direct Control Matrix D:')
         print(self.D)
+
+    def getA(self):
+        return self.A
+
+    def getB(self):
+        return self.B
+
+    def getC(self):
+        return self.C
+
+    def getD(self):
+        return self.D

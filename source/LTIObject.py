@@ -19,13 +19,31 @@ class LTIObject(object):
 
     # Static methods
     @staticmethod
-    def serial():
-        pass
+    def serial(*objects):
+        objects_number = len(objects)
+        try:
+            new_object = objects[0]
+
+            for idx in range(1, objects_number):
+                new_object.serialConnection(objects[idx])
+
+            return new_object
+        except:
+            print('No objects given!')
 
     @staticmethod
-    def parallel():
-        pass
+    def parallel(*objects):
+        objects_number = len(objects)
+        try:
+            new_object = objects[0]
+
+            for idx in range(1, objects_number):
+                new_object.parallelConnection(objects[idx])
+            
+            return new_object
+        except:
+            print('No objects given!')
 
     @staticmethod
-    def feedback():
+    def feedback(*objects):
         pass
