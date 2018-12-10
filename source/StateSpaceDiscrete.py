@@ -1,4 +1,4 @@
-import StateSpace
+import source.StateSpace as StateSpace
 
 class StateSpaceDiscrete(StateSpace.StateSpace):
 
