@@ -1,4 +1,4 @@
-import TransferFunction
+import source.TransferFunction as TransferFunction
 
 class TransferFunctionDiscrete(TransferFunction.TransferFunction):
 

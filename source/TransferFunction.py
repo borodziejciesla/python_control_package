@@ -7,12 +7,6 @@ class TransferFunction(LTIObject.LTIObject):
         self.numerator = numerator
         self.denumerator = denumerator
 
-    def printSystem(self):
-        print('Numerator:')
-        print(self.numerator)
-        print('Denumerator:')
-        print(self.denumerator)
-
     # operator== overload
     def __eq__(self, other):
         self_num = self.numerator

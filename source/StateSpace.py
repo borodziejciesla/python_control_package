@@ -8,15 +8,13 @@ class StateSpace(LTIObject.LTIObject):
         self.C = C
         self.D = D
 
-    def printSystem(self):
-        print('State Matrix A:')
-        print(self.A)
-        print('Control Matrix B:')
-        print(self.B)
-        print('Output Matrix C:')
-        print(self.C)
-        print('Direct Control Matrix D:')
-        print(self.D)
+    # operator== overloaded
+    def __eq__(self, other):
+        return ((self.A == other.A) and (self.B == other.B) and (self.C == other.C) and (self.D == other.D))
+
+    # convert to string
+    def __str__(self):
+        return 'State Matrix A:\n' + str(self.A) + '\nControl Matrix B:\n' + str(self.B) + '\nOutput Matrix C:\n' + str(self.C) + '\nDirect Control Matrix D:\n' + str(self.D)
 
     def getA(self):
         return self.A
