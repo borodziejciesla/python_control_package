@@ -44,7 +44,7 @@ class LTIObject(object):
             new_object = objects[0]
 
             for idx in range(1, objects_number):
-                new_object.parallelConnection(objects[idx])
+                new_object = new_object.parallelConnection(objects[idx])
             
             return new_object
         except:
