@@ -17,6 +17,12 @@ class LTIObject(object):
     def printSystem(self):
         pass
 
+    def __add__(self, other):
+        return self.parallel(self, other)
+
+    def __mul__(self, other):
+        return self.serial(self, other)
+
     # Static methods
     @staticmethod
     def serial(*objects):
@@ -25,7 +31,7 @@ class LTIObject(object):
             new_object = objects[0]
 
             for idx in range(1, objects_number):
-                new_object.serialConnection(objects[idx])
+                new_object = new_object.serialConnection(objects[idx])
 
             return new_object
         except:

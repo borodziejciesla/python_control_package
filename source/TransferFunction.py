@@ -45,7 +45,15 @@ class TransferFunction(LTIObject.LTIObject):
 
     # find serial connection of two transfer functions
     def serialConnection(self, consecutive_object):
-        new_numerator = np.polyadd(np.polymul(self.numerator, consecutive_object.denumerator), np.polymul(self.denumerator, consecutive_object.numerator))
+        new_numerator = np.polymul(self.numerator, consecutive_object.numerator)
         new_denumerator = np.polymul(self.denumerator, consecutive_object.denumerator)
 
-        return TransferFunction(new_numerator, new_denumerator)
+        result = TransferFunction(new_numerator, new_denumerator)
+
+        return result
+
+
+obj_1 = TransferFunction([1], [1, 2])
+obj_2 = TransferFunction([1], [1, 2])
+obj = obj_1 * obj_2
+obj_ref = TransferFunction([1], [1, 4, 4])

@@ -9,7 +9,17 @@ class TestLTISystem(unittest.TestCase):
 
         obj = obj_1.serialConnection(obj_2)
 
-        obj_ref = TransferFunction([2, 4], [1, 4, 4])
+        obj_ref = TransferFunction([1], [1, 4, 4])
+
+        self.assertEqual(obj, obj_ref)
+
+    def test_multiply_operator(self):
+        obj_1 = TransferFunction([1], [1, 2])
+        obj_2 = TransferFunction([1], [1, 2])
+
+        obj = obj_1 * obj_2
+
+        obj_ref = TransferFunction([1], [1, 4, 4])
 
         self.assertEqual(obj, obj_ref)
 
