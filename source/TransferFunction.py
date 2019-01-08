@@ -43,6 +43,15 @@ class TransferFunction(LTIObject.LTIObject):
     def getDenumerator(self):
         return self.denumerator
 
+    # inverse Transfer Function
+    def __inverse(self):
+        tmp = self.numerator
+
+        self.numerator = self.denumerator
+        self.denumerator = tmp
+
+        return self
+
     # find serial connection of two transfer functions
     def serialConnection(self, consecutive_object):
         new_numerator = np.polymul(self.numerator, consecutive_object.numerator)
@@ -60,8 +69,15 @@ class TransferFunction(LTIObject.LTIObject):
 
         return result
 
+    def feedbackConnection(self, upper_line, feedback_line):
+        Un = upper_line.numerator
+        Ud = upper_line.denumerator
+        Fn = feedback_line.numerator
+        Fd = feedback_line.denumerator
 
-obj_1 = TransferFunction([1], [1, 2])
-obj_2 = TransferFunction([1], [1, 2])
-obj = obj_1 * obj_2
-obj_ref = TransferFunction([1], [1, 4, 4])
+        new_numerator = np.polymul(Un, Fd)
+        new_denumerator = np.polyadd(np.polymul(Fd, Ud), np.polymul(Fn, Un))
+
+        result = TransferFunction(new_numerator, new_denumerator)
+
+        return result

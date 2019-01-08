@@ -51,5 +51,6 @@ class LTIObject(object):
             print('No objects given!')
 
     @staticmethod
-    def feedback(*objects):
-        pass
+    def feedback(upper_line, feedback_line):
+        new_object = upper_line
+        return new_object.feedbackConnection(upper_line, feedback_line)
