@@ -69,3 +69,24 @@ class StateSpace(LTIObject.LTIObject):
         new_D = D1 + D2
 
         return StateSpace(new_A, new_B, new_C, new_D)
+
+    def feedbackConnection(self, upper_line, feedback_line):
+        A1 = upper_line._A
+        B1 = upper_line._B
+        C1 = upper_line._C
+        D1 = upper_line._D
+
+        A2 = feedback_line._A
+        B2 = feedback_line._B
+        C2 = feedback_line._C
+        D2 = feedback_line._D
+
+        # Verification of matrix dimensions is needed
+        new_A = np.concatenate( (np.concatenate([A1, -B1 * C2], axis = 1), np.concatenate([B2 * C1, A2], axis = 1)) )
+        zb = np.zeros((A2.shape[0], B1.shape[1]))
+        new_B = np.concatenate([B1, zb])
+        zc = np.zeros((C1.shape[0], A2.shape[1]))
+        new_C = np.concatenate([C1, zc], axis = 1)
+        new_D = np.array([0])
+
+        return StateSpace(new_A, new_B, new_C, new_D)

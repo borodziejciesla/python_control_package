@@ -100,14 +100,29 @@ class TestLTISystem(unittest.TestCase):
 
         self.assertEqual(obj, obj_ref)
 
-    # def test_feedback(self):
-    #     obj_1 = TransferFunction([1], [1, 2])
-    #     obj_2 = TransferFunction([1], [1, 2])
-    #     obj_ref = TransferFunction([1, 2], [1, 4, 5])
+    def test_feedback(self):
+        A1 = np.array([[1, 2], [0, 1]])
+        B1 = np.array([[0], [1]])
+        C1 = np.transpose(np.array([[1], [0]]))
+        D1 = np.array([1])
 
-    #     obj = TransferFunction.feedback(obj_1, obj_2)
+        A2 = np.array([[1, 2], [0, 1]])
+        B2 = np.array([[0], [1]])
+        C2 = np.transpose(np.array([[1], [0]]))
+        D2 = np.array([1])
 
-    #     self.assertEqual(obj, obj_ref)
+        A_ref = np.array([[1, 2, 0, 0], [0, 1, -1, 0], [0, 0, 1, 2], [1, 0, 0, 1]])
+        B_ref = np.array([[0], [1], [0], [0]])
+        C_ref = np.transpose(np.array([[1], [0], [0], [0]]))
+        D_ref = np.array([0])
+
+        obj_1 = StateSpace(A1, B1, C1, D1)
+        obj_2 = StateSpace(A2, B2, C2, D2)
+        obj_ref = StateSpace(A_ref, B_ref, C_ref, D_ref)
+
+        obj = StateSpace.feedback(obj_1, obj_2)
+
+        self.assertEqual(obj, obj_ref)
 
 if __name__ == '__main__':
     unittest.main()
