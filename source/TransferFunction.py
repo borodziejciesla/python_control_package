@@ -4,15 +4,15 @@ import numpy as np
 class TransferFunction(LTIObject.LTIObject):
     
     def __init__(self, numerator, denumerator):
-        self.numerator = numerator
-        self.denumerator = denumerator
+        self._numerator = numerator
+        self._denumerator = denumerator
 
     # operator== overload
     def __eq__(self, other):
-        self_num = self.numerator
+        self_num = self._numerator
         other_num = other.getNumerator()
 
-        self_den = self.denumerator
+        self_den = self._denumerator
         other_den = other.getDenumerator()
 
         if (len(self_num) == len(other_num)):
@@ -33,51 +33,45 @@ class TransferFunction(LTIObject.LTIObject):
 
     # convert to string
     def __str__(self):
-        return 'Numerator:\n' + str(self.numerator) + '\n' + 'Denumerator:\n' + str(self.denumerator)
+        return 'Numerator:\n' + str(self._numerator) + '\n' + 'Denumerator:\n' + str(self._denumerator)
 
     # get numerator
     def getNumerator(self):
-        return self.numerator
+        return self._numerator
 
     # get denumerator
     def getDenumerator(self):
-        return self.denumerator
+        return self._denumerator
 
     # inverse Transfer Function
     def __inverse(self):
-        tmp = self.numerator
+        tmp = self._numerator
 
-        self.numerator = self.denumerator
-        self.denumerator = tmp
+        self._numerator = self._denumerator
+        self._denumerator = tmp
 
         return self
 
     # find serial connection of two transfer functions
     def serialConnection(self, consecutive_object):
-        new_numerator = np.polymul(self.numerator, consecutive_object.numerator)
-        new_denumerator = np.polymul(self.denumerator, consecutive_object.denumerator)
+        new_numerator = np.polymul(self._numerator, consecutive_object._numerator)
+        new_denumerator = np.polymul(self._denumerator, consecutive_object._denumerator)
 
-        result = TransferFunction(new_numerator, new_denumerator)
-
-        return result
+        return TransferFunction(new_numerator, new_denumerator)
 
     def parallelConnection(self, consecutive_object):
-        new_numerator = np.polyadd(np.polymul(self.numerator, consecutive_object.denumerator), np.polymul(self.denumerator, consecutive_object.numerator))
-        new_denumerator = np.polymul(self.denumerator, consecutive_object.denumerator)
+        new_numerator = np.polyadd(np.polymul(self._numerator, consecutive_object._denumerator), np.polymul(self._denumerator, consecutive_object._numerator))
+        new_denumerator = np.polymul(self._denumerator, consecutive_object._denumerator)
 
-        result = TransferFunction(new_numerator, new_denumerator)
-
-        return result
+        return TransferFunction(new_numerator, new_denumerator)
 
     def feedbackConnection(self, upper_line, feedback_line):
-        Un = upper_line.numerator
-        Ud = upper_line.denumerator
-        Fn = feedback_line.numerator
-        Fd = feedback_line.denumerator
+        Un = upper_line._numerator
+        Ud = upper_line._denumerator
+        Fn = feedback_line._numerator
+        Fd = feedback_line._denumerator
 
         new_numerator = np.polymul(Un, Fd)
         new_denumerator = np.polyadd(np.polymul(Fd, Ud), np.polymul(Fn, Un))
 
-        result = TransferFunction(new_numerator, new_denumerator)
-
-        return result
+        return TransferFunction(new_numerator, new_denumerator)

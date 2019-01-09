@@ -18,10 +18,10 @@ class LTIObject(object):
         pass
 
     def __add__(self, other):
-        return self.parallel(self, other)
+        return LTIObject.parallel(self, other)
 
     def __mul__(self, other):
-        return self.serial(self, other)
+        return LTIObject.serial(self, other)
 
     # Static methods
     @staticmethod
