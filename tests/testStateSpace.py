@@ -124,5 +124,47 @@ class TestLTISystem(unittest.TestCase):
 
         self.assertEqual(obj, obj_ref)
 
+    def test_matrix_verivication_positive(self):
+        A = np.array([[1, 2], [0, 1]])
+        B = np.array([[0], [1]])
+        C = np.transpose(np.array([[1], [0]]))
+        D = np.array([1])
+
+        obj = StateSpace(A, B, C, D)
+
+        self.assertEqual(obj.isValid(), True)
+
+    def test_matrix_verivication_negative_1(self):
+        A = np.array([[1], [0]])
+        B = np.array([[0], [1]])
+        C = np.transpose(np.array([[1], [0]]))
+        D = np.array([1])
+
+        obj = StateSpace(A, B, C, D)
+
+        self.assertEqual(obj.isValid(), False)
+
+    def test_matrix_verivication_negative_2(self):
+        A = np.array([[1, 2], [0, 1]])
+        B = np.array([1])
+        C = np.transpose(np.array([[1], [0]]))
+        D = np.array([1])
+
+        obj = StateSpace(A, B, C, D)
+
+        self.assertEqual(obj.isValid(), False)
+
+    def test_matrix_verivication_negative_3(self):
+        A = np.array([[1], [0]])
+        B = np.array([[0], [1]])
+        C = np.transpose(np.array([1]))
+        D = np.array([1])
+
+        obj = StateSpace(A, B, C, D)
+
+        self.assertEqual(obj.isValid(), False)
+
+
+
 if __name__ == '__main__':
     unittest.main()

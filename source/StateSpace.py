@@ -4,12 +4,55 @@ import numpy as np
 class StateSpace(LTIObject.LTIObject):
     
     def __init__(self, A, B, C, D):
-        self._A = A
-        self._B = B
-        self._C = C
-        self._D = D
+        self.__verifyMatrixDimensions(A, B, C, D)
 
-    # operator== overloaded
+        if self._is_valid:
+            self._A = A
+            self._B = B
+            self._C = C
+            self._D = D
+
+            self._state_dimension = A.shape[0]
+            self._control_dimension = B.shape[1]
+            self._output_dimension = C.shape[0]
+        else:
+            self._A = []
+            self._B = []
+            self._C = []
+            self._D = []
+
+            self._state_dimension = []
+            self._control_dimension = []
+            self._output_dimension = []
+
+            print("Invalid Matrix dimensions")
+
+    def __verifyMatrixDimensions(self, A, B, C, D):
+        if (A.size > 1):
+            state_matrix_shape = A.shape
+        else:
+            state_matrix_shape = (1, 1)
+
+        if (B.size > 1):
+            control_matrix_shape = B.shape
+        else:
+            control_matrix_shape = (1, 1)
+
+        if (C.size > 1):
+            output_matrix_shape = C.shape
+        else:
+            output_matrix_shape = (1, 1)
+
+        if (D.size > 1):
+            direct_control_matrix_shape = D.shape
+        else:
+            direct_control_matrix_shape = (1, 1)
+
+        self._is_valid = (state_matrix_shape[0] == state_matrix_shape[1]) and (state_matrix_shape[0] == control_matrix_shape[0])
+        self._is_valid = self._is_valid and (output_matrix_shape[1] == state_matrix_shape[1]) and (output_matrix_shape[1] <= state_matrix_shape[0])
+        self._is_valid = self._is_valid and (direct_control_matrix_shape[0] == output_matrix_shape[0]) and (direct_control_matrix_shape[1] == control_matrix_shape[1])
+
+    # operator == overloaded
     def __eq__(self, other):
         return (np.array_equal(self._A, other._A) and np.array_equal(self._B, other._B) and np.array_equal(self._C, other._C) and np.array_equal(self._D, other._D))
 
@@ -28,6 +71,12 @@ class StateSpace(LTIObject.LTIObject):
 
     def getD(self):
         return self._D
+
+    def isValid(self):
+        return self._is_valid
+
+    def __isValidShapeForSerialConnection(self):
+        pass
 
     def serialConnection(self, consecutive_object):
         A1 = self._A
@@ -49,6 +98,9 @@ class StateSpace(LTIObject.LTIObject):
 
         return StateSpace(new_A, new_B, new_C, new_D)
 
+    def __isValidShapeForParallelConnection(self):
+        pass
+
     def parallelConnection(self, consecutive_object):
         A1 = self._A
         B1 = self._B
@@ -69,6 +121,9 @@ class StateSpace(LTIObject.LTIObject):
         new_D = D1 + D2
 
         return StateSpace(new_A, new_B, new_C, new_D)
+
+    def __isValidShapeForFeedbackConnection(self):
+        pass
 
     def feedbackConnection(self, upper_line, feedback_line):
         A1 = upper_line._A
