@@ -7,17 +7,13 @@ Intention of this package is develop open source package for analysis and design
 ## Getting Started
 
 Initially project was developed with Python version 3.7.0
+Package is developed with with usage of Visual Studio IDE. Following extensions are used:
 ```
-    examlpe
-```
-Package is developed with IDE:
-```
-    Visual Studio Code
+    Python
+    Python Test Explorer for Visual Studio Code
 ```
 
 ### Prerequisites
-
-## Build Status
 
 ## Code Style
 In project [Google Python Code Style](http://google.github.io/styleguide/pyguide.html) should be used.
