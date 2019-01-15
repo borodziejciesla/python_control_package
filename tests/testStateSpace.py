@@ -28,6 +28,24 @@ class TestLTISystem(unittest.TestCase):
 
         self.assertEqual(obj, obj_ref)
 
+    def test_serial_connection_negative_1(self):
+        A1 = np.array([[1, 2], [0, 1]])
+        B1 = np.array([[0], [1]])
+        C1 = np.transpose(np.array([[1], [0]]))
+        D1 = np.array([1])
+
+        A2 = np.array([[1, 2], [0, 1]])
+        B2 = np.array([[0, 1], [1, 0]])
+        C2 = np.transpose(np.array([[1], [0]]))
+        D2 = np.array([[1], [0]])
+
+        obj_1 = StateSpace(A1, B1, C1, D1)
+        obj_2 = StateSpace(A2, B2, C2, D2)
+
+        obj = obj_1.serialConnection(obj_2)
+
+        self.assertEqual(obj.isValid(), False)
+
     def test_multiply_operator(self):
         A1 = np.array([[1, 2], [0, 1]])
         B1 = np.array([[0], [1]])
@@ -51,6 +69,24 @@ class TestLTISystem(unittest.TestCase):
         obj = obj_1 * obj_2       
 
         self.assertEqual(obj, obj_ref)
+
+    def test_multiply_operator_negative(self):
+        A1 = np.array([[1, 2], [0, 1]])
+        B1 = np.array([[0], [1]])
+        C1 = np.transpose(np.array([[1, 0], [0, 1]]))
+        D1 = np.array([1])
+
+        A2 = np.array([[1, 2], [0, 1]])
+        B2 = np.array([[0], [1]])
+        C2 = np.transpose(np.array([[1], [0]]))
+        D2 = np.array([1])
+
+        obj_1 = StateSpace(A1, B1, C1, D1)
+        obj_2 = StateSpace(A2, B2, C2, D2)
+
+        obj = obj_1 * obj_2       
+
+        self.assertEqual(obj.isValid(), False)
 
     def test_parallel_connection_1(self):
         A1 = np.array([[1, 2], [0, 1]])
