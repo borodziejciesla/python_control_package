@@ -85,15 +85,15 @@ class StateSpace(LTIObject.LTIObject):
     def getD(self):
         return self._D
 
-    ## Connections
-    # Serial
-    @staticmethod
-    def _isValidShapeForSerialConnection(input_object, output_object):
-        if (input_object.isValid() and output_object.isValid()):
-            return (input_object._output_dimension == output_object._control_dimension)
+    ## Analysis
+    def eigenvalues(self):
+        if self.isValid():
+            eig, vec = np.linalg.eig(self._A)
+            return eig
         else:
-            return False
+            return []
 
+    ## Connections
     def serialConnection(self, consecutive_object):
         if StateSpace._isValidShapeForSerialConnection(self, consecutive_object):
             A1 = self._A
@@ -116,15 +116,6 @@ class StateSpace(LTIObject.LTIObject):
             return StateSpace(new_A, new_B, new_C, new_D)
         else:
             return StateSpace([], [], [], [], True)
-
-    # Parallel
-    @staticmethod
-    def _isValidShapeForParallelConnection(upper_object, lower_object):
-        if (upper_object.isValid() and lower_object.isValid):
-            return (upper_object._control_dimension == lower_object._control_dimension) \
-                and (upper_object._output_dimension == lower_object._output_dimension)
-        else:
-            return False
 
     def parallelConnection(self, consecutive_object):
         if StateSpace._isValidShapeForParallelConnection(self, consecutive_object):
@@ -150,15 +141,6 @@ class StateSpace(LTIObject.LTIObject):
         else:
             return StateSpace([], [], [], [], True)
 
-    # Feedback
-    @staticmethod
-    def _isValidShapeForFeedbackConnection(direct_line, feedback_line):
-        if (direct_line.isValid() and feedback_line.isValid()):
-            return (direct_line._output_dimension == feedback_line._control_dimension) \
-                and (direct_line._control_dimension == feedback_line._output_dimension)
-        else:
-            return False
-
     def feedbackConnection(self, upper_line, feedback_line):
         if StateSpace._isValidShapeForFeedbackConnection(upper_line, feedback_line):
             A1 = upper_line._A
@@ -182,3 +164,16 @@ class StateSpace(LTIObject.LTIObject):
             return StateSpace(new_A, new_B, new_C, new_D)
         else:
             return StateSpace([], [], [], [], True)
+
+A = np.array([[1, 2], [0, 1]])
+B = np.array([[0], [1]])
+C = np.transpose(np.array([[1], [0]]))
+D = np.array([1])
+
+obj = StateSpace(A, B, C, D)
+eig = obj.eigenvalues()
+
+ref = np.array([1, 1])
+np.all(ref == eig)
+
+f =9

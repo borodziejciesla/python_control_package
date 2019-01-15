@@ -21,6 +21,9 @@ class LTIObject(object):
     def isValid(self):
         return self._is_valid
 
+    def eigenvalues(self):
+        pass
+
     ## Static methods
     # Serial connection
     @staticmethod

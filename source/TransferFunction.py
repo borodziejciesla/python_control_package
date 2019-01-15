@@ -82,6 +82,13 @@ class TransferFunction(LTIObject.LTIObject):
 
         return self
 
+    ## Analysis
+    def eigenvalues(self):
+        if self.isValid():
+            return np.roots(self._numerator)
+        else:
+            return []
+
     ## Connections
     def serialConnection(self, consecutive_object):
         if TransferFunction._isValidShapeForSerialConnection(self, consecutive_object):
