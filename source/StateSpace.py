@@ -164,16 +164,3 @@ class StateSpace(LTIObject.LTIObject):
             return StateSpace(new_A, new_B, new_C, new_D)
         else:
             return StateSpace([], [], [], [], True)
-
-A = np.array([[1, 2], [0, 1]])
-B = np.array([[0], [1]])
-C = np.transpose(np.array([[1], [0]]))
-D = np.array([1])
-
-obj = StateSpace(A, B, C, D)
-eig = obj.eigenvalues()
-
-ref = np.array([1, 1])
-np.all(ref == eig)
-
-f =9
