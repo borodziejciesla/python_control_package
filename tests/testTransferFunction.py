@@ -12,6 +12,14 @@ class TestLTISystem(unittest.TestCase):
 
         self.assertEqual(obj, obj_ref)
 
+    def test_serial_connection_negative_1(self):
+        obj_1 = TransferFunction([1], [1, 2])
+        obj_2 = TransferFunction([1, 2], [1, 2])
+
+        obj = obj_1.serialConnection(obj_2)
+
+        self.assertEqual(obj.isValid(), False)
+
     def test_multiply_operator(self):
         obj_1 = TransferFunction([1], [1, 2])
         obj_2 = TransferFunction([1], [1, 2])
@@ -50,3 +58,4 @@ class TestLTISystem(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+    

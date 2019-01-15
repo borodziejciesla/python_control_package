@@ -64,14 +64,15 @@ class StateSpace(LTIObject.LTIObject):
         self._is_valid = self._is_valid and (output_matrix_shape[1] == state_matrix_shape[1]) and (output_matrix_shape[1] <= state_matrix_shape[0])
         self._is_valid = self._is_valid and (direct_control_matrix_shape[0] == output_matrix_shape[0]) and (direct_control_matrix_shape[1] == control_matrix_shape[1])
 
-    # operator == overloaded
+    # Operator == overloaded
     def __eq__(self, other):
         return (np.array_equal(self._A, other._A) and np.array_equal(self._B, other._B) and np.array_equal(self._C, other._C) and np.array_equal(self._D, other._D))
 
-    # convert to string
+    # Convert to string
     def __str__(self):
         return 'State Matrix A:\n' + str(self._A) + '\nControl Matrix B:\n' + str(self._B) + '\nOutput Matrix C:\n' + str(self._C) + '\nDirect Control Matrix D:\n' + str(self._D)
 
+    # Get matrices
     def getA(self):
         return self._A
 
@@ -84,18 +85,17 @@ class StateSpace(LTIObject.LTIObject):
     def getD(self):
         return self._D
 
-    def isValid(self):
-        return self._is_valid
-
+    ## Connections
+    # Serial
     @staticmethod
-    def __isValidShapeForSerialConnection(input_object, output_object):
-        if (input_object._is_valid and output_object._is_valid):
+    def _isValidShapeForSerialConnection(input_object, output_object):
+        if (input_object.isValid() and output_object.isValid()):
             return (input_object._output_dimension == output_object._control_dimension)
         else:
             return False
 
     def serialConnection(self, consecutive_object):
-        if StateSpace.__isValidShapeForSerialConnection(self, consecutive_object):
+        if StateSpace._isValidShapeForSerialConnection(self, consecutive_object):
             A1 = self._A
             B1 = self._B
             C1 = self._C
@@ -117,16 +117,17 @@ class StateSpace(LTIObject.LTIObject):
         else:
             return StateSpace([], [], [], [], True)
 
+    # Parallel
     @staticmethod
-    def __isValidShapeForParallelConnection(upper_object, lower_object):
-        if (upper_object._is_valid and lower_object._is_valid):
+    def _isValidShapeForParallelConnection(upper_object, lower_object):
+        if (upper_object.isValid() and lower_object.isValid):
             return (upper_object._control_dimension == lower_object._control_dimension) \
                 and (upper_object._output_dimension == lower_object._output_dimension)
         else:
             return False
 
     def parallelConnection(self, consecutive_object):
-        if StateSpace.__isValidShapeForParallelConnection(self, consecutive_object):
+        if StateSpace._isValidShapeForParallelConnection(self, consecutive_object):
             A1 = self._A
             B1 = self._B
             C1 = self._C
@@ -149,25 +150,26 @@ class StateSpace(LTIObject.LTIObject):
         else:
             return StateSpace([], [], [], [], True)
 
+    # Feedback
     @staticmethod
-    def __isValidShapeForFeedbackConnection(direct_line, feedback_line):
-        if (direct_line._is_valid and feedback_line._is_valid):
+    def _isValidShapeForFeedbackConnection(direct_line, feedback_line):
+        if (direct_line.isValid() and feedback_line.isValid()):
             return (direct_line._output_dimension == feedback_line._control_dimension) \
                 and (direct_line._control_dimension == feedback_line._output_dimension)
         else:
             return False
 
     def feedbackConnection(self, upper_line, feedback_line):
-        if StateSpace.__isValidShapeForFeedbackConnection(upper_line, feedback_line):
+        if StateSpace._isValidShapeForFeedbackConnection(upper_line, feedback_line):
             A1 = upper_line._A
             B1 = upper_line._B
             C1 = upper_line._C
-            D1 = upper_line._D
+            #D1 = upper_line._D
 
             A2 = feedback_line._A
             B2 = feedback_line._B
             C2 = feedback_line._C
-            D2 = feedback_line._D
+            #D2 = feedback_line._D
 
             # Verification of matrix dimensions is needed
             new_A = np.concatenate( (np.concatenate([A1, -B1 * C2], axis = 1), np.concatenate([B2 * C1, A2], axis = 1)) )

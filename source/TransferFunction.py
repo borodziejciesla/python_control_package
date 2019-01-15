@@ -3,11 +3,41 @@ import numpy as np
 
 class TransferFunction(LTIObject.LTIObject):
     
-    def __init__(self, numerator, denumerator):
-        self._numerator = numerator
-        self._denumerator = denumerator
+    def __init__(self, numerator, denumerator, create_empty = False):
+        if (create_empty == False):
+            self.__verifyVectorShape(numerator, denumerator)
 
-    # operator== overload
+            if self._is_valid:
+                self._numerator = numerator
+                self._denumerator = denumerator
+
+                self._state_dimension = denumerator.__len__()
+                self._control_dimension = 1
+                self._output_dimension = 1
+            else:
+                self._numerator = []
+                self._denumerator = []
+
+                self._state_dimension = []
+                self._control_dimension = []
+                self._output_dimension = []
+        else:
+            self._is_valid = False
+
+            self._numerator = []
+            self._denumerator = []
+
+            self._state_dimension = []
+            self._control_dimension = []
+            self._output_dimension = []
+
+    def __verifyVectorShape(self, numerator, denumerator):
+        if (numerator.__len__() < denumerator.__len__()):
+            self._is_valid = True
+        else:
+            self._is_valid = False
+
+    # Operator == overload
     def __eq__(self, other):
         self_num = self._numerator
         other_num = other.getNumerator()
@@ -35,15 +65,15 @@ class TransferFunction(LTIObject.LTIObject):
     def __str__(self):
         return 'Numerator:\n' + str(self._numerator) + '\n' + 'Denumerator:\n' + str(self._denumerator)
 
-    # get numerator
+    # Get numerator
     def getNumerator(self):
         return self._numerator
 
-    # get denumerator
+    # Get denumerator
     def getDenumerator(self):
         return self._denumerator
 
-    # inverse Transfer Function
+    # Inverse Transfer Function
     def __inverse(self):
         tmp = self._numerator
 
@@ -52,26 +82,35 @@ class TransferFunction(LTIObject.LTIObject):
 
         return self
 
-    # find serial connection of two transfer functions
+    ## Connections
     def serialConnection(self, consecutive_object):
-        new_numerator = np.polymul(self._numerator, consecutive_object._numerator)
-        new_denumerator = np.polymul(self._denumerator, consecutive_object._denumerator)
+        if TransferFunction._isValidShapeForSerialConnection(self, consecutive_object):
+            new_numerator = np.polymul(self._numerator, consecutive_object._numerator)
+            new_denumerator = np.polymul(self._denumerator, consecutive_object._denumerator)
 
-        return TransferFunction(new_numerator, new_denumerator)
+            return TransferFunction(new_numerator, new_denumerator)
+        else:
+            return TransferFunction([], [], True)
 
     def parallelConnection(self, consecutive_object):
-        new_numerator = np.polyadd(np.polymul(self._numerator, consecutive_object._denumerator), np.polymul(self._denumerator, consecutive_object._numerator))
-        new_denumerator = np.polymul(self._denumerator, consecutive_object._denumerator)
+        if TransferFunction._isValidShapeForParallelConnection(self, consecutive_object):
+            new_numerator = np.polyadd(np.polymul(self._numerator, consecutive_object._denumerator), np.polymul(self._denumerator, consecutive_object._numerator))
+            new_denumerator = np.polymul(self._denumerator, consecutive_object._denumerator)
 
-        return TransferFunction(new_numerator, new_denumerator)
+            return TransferFunction(new_numerator, new_denumerator)
+        else:
+            return TransferFunction([], [], False)
 
     def feedbackConnection(self, upper_line, feedback_line):
-        Un = upper_line._numerator
-        Ud = upper_line._denumerator
-        Fn = feedback_line._numerator
-        Fd = feedback_line._denumerator
+        if TransferFunction._isValidShapeForFeedbackConnection(upper_line, feedback_line):
+            Un = upper_line._numerator
+            Ud = upper_line._denumerator
+            Fn = feedback_line._numerator
+            Fd = feedback_line._denumerator
 
-        new_numerator = np.polymul(Un, Fd)
-        new_denumerator = np.polyadd(np.polymul(Fd, Ud), np.polymul(Fn, Un))
+            new_numerator = np.polymul(Un, Fd)
+            new_denumerator = np.polyadd(np.polymul(Fd, Ud), np.polymul(Fn, Un))
 
-        return TransferFunction(new_numerator, new_denumerator)
+            return TransferFunction(new_numerator, new_denumerator)
+        else:
+            return TransferFunction([], [], False)
