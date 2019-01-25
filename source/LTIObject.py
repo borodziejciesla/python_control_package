@@ -4,7 +4,16 @@ import abc
 
 class LTIObject(object):
     __metaclass__ = abc.ABCMeta  
-    _is_valid = False  
+    _is_valid = False
+    _input_name = None
+    _output_name = None
+    _state_dimension = None
+    _control_dimension = None
+    _output_dimension = None
+
+    def __init__(self, input_name, output_name):
+        self._setInputNames(input_name)
+        self._setOutputNames(output_name)
     
     @abc.abstractmethod
     def bode(self):
@@ -23,6 +32,27 @@ class LTIObject(object):
 
     def eigenvalues(self):
         pass
+
+    ## Names
+    # getes
+    def getInputsNames(self):
+        return self._input_name
+
+    def getOutputsNames(self):
+        return self._output_name
+
+    # seters
+    def _setInputNames(self, input_names):
+        if ((input_names is None) or (self._control_dimension == len(input_names))):
+            self._input_name = input_names
+        else:
+            raise Exception("Number of input names different than control inputs.")
+
+    def _setOutputNames(self, output_names):
+        if ((output_names is None) or (self._output_dimension == len(output_names))):
+            self._output_name = output_names
+        else:
+            raise Exception("Number of output names different than outputs number.")
 
     ## Static methods
     # Serial connection

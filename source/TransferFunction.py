@@ -3,7 +3,7 @@ import numpy as np
 
 class TransferFunction(LTIObject.LTIObject):
     
-    def __init__(self, numerator, denumerator, create_empty = False):
+    def __init__(self, numerator, denumerator, create_empty = False, input_name = None, output_name = None):
         if (create_empty == False):
             self.__verifyVectorShape(numerator, denumerator)
 
@@ -30,6 +30,8 @@ class TransferFunction(LTIObject.LTIObject):
             self._state_dimension = []
             self._control_dimension = []
             self._output_dimension = []
+
+        super().__init__(input_name, output_name)
 
     def __verifyVectorShape(self, numerator, denumerator):
         if (numerator.__len__() < denumerator.__len__()):

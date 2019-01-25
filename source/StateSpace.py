@@ -3,7 +3,7 @@ import numpy as np
 
 class StateSpace(LTIObject.LTIObject):
     
-    def __init__(self, A, B, C, D, create_empty = False):
+    def __init__(self, A, B, C, D, create_empty = False, input_name = None, output_name = None):
         if (create_empty == False):
             self.__verifyMatrixDimensions(A, B, C, D)
 
@@ -38,6 +38,8 @@ class StateSpace(LTIObject.LTIObject):
             self._state_dimension = []
             self._control_dimension = []
             self._output_dimension = []
+
+        super().__init__(input_name, output_name)
 
     def __verifyMatrixDimensions(self, A, B, C, D):
         if (A.size > 1):
