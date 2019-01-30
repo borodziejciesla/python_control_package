@@ -39,7 +39,12 @@ class StateSpace(LTIObject.LTIObject):
             self._control_dimension = []
             self._output_dimension = []
 
-        super().__init__(input_name, output_name)
+        try:
+            super().__init__(input_name, output_name)
+        except Exception as error:
+            print(error)
+        except:# NameError as error:
+            print("Unknown Error")
 
     def __verifyMatrixDimensions(self, A, B, C, D):
         if (A.size > 1):

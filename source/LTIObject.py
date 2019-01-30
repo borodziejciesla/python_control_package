@@ -12,8 +12,8 @@ class LTIObject(object):
     _output_dimension = None
 
     def __init__(self, input_name, output_name):
-        self._setInputNames(input_name)
-        self._setOutputNames(output_name)
+        self.setInputNames(input_name)
+        self.setOutputNames(output_name)
     
     @abc.abstractmethod
     def bode(self):
@@ -42,13 +42,13 @@ class LTIObject(object):
         return self._output_name
 
     # seters
-    def _setInputNames(self, input_names):
+    def setInputNames(self, input_names):
         if ((input_names is None) or (self._control_dimension == len(input_names))):
             self._input_name = input_names
         else:
             raise Exception("Number of input names different than control inputs.")
 
-    def _setOutputNames(self, output_names):
+    def setOutputNames(self, output_names):
         if ((output_names is None) or (self._output_dimension == len(output_names))):
             self._output_name = output_names
         else:

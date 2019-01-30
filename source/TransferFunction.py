@@ -31,7 +31,12 @@ class TransferFunction(LTIObject.LTIObject):
             self._control_dimension = []
             self._output_dimension = []
 
-        super().__init__(input_name, output_name)
+        try:
+            super().__init__(input_name, output_name)
+        except Exception as error:
+            print(error)
+        except:
+            print("Unknown error")
 
     def __verifyVectorShape(self, numerator, denumerator):
         if (numerator.__len__() < denumerator.__len__()):

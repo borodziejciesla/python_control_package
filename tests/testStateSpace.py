@@ -254,5 +254,27 @@ class TestLTISystem(unittest.TestCase):
 
         self.assertEqual(obj.isValid(), False)
 
+    def test_input_outputs_names(self):
+        A = np.array([[1, 2], [0, 1]])
+        B = np.array([[0], [1]])
+        C = np.transpose(np.array([[1], [0]]))
+        D = np.array([1])
+
+        obj = StateSpace(A, B, C, D, input_name = ['Input'], output_name = ['Output'])
+
+        self.assertEqual(obj.getInputsNames(), ['Input'])
+        self.assertEqual(obj.getOutputsNames(), ['Output'])
+
+    def test_input_outputs_names_negative(self):
+        A = np.array([[1, 2], [0, 1]])
+        B = np.array([[0], [1]])
+        C = np.transpose(np.array([[1], [0]]))
+        D = np.array([1])
+
+        obj = StateSpace(A, B, C, D, input_name = ['Input_1', 'Input_2'], output_name = ['Output'])
+
+        self.assertIsNone(obj.getInputsNames())
+        self.assertIsNone(obj.getOutputsNames())
+
 if __name__ == '__main__':
     unittest.main()

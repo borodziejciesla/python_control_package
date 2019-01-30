@@ -56,6 +56,18 @@ class TestLTISystem(unittest.TestCase):
 
         self.assertEqual(obj, obj_ref)
 
+    def test_input_outputs_names(self):
+        obj = TransferFunction([1], [1, 2], input_name = ['Input'], output_name = ['Output'])
+
+        self.assertEqual(obj.getInputsNames(), ['Input'])
+        self.assertEqual(obj.getOutputsNames(), ['Output'])
+
+    def test_input_outputs_names_negative(self):
+        obj = TransferFunction([1], [1, 2], input_name = ['Input_1', 'Input_2'], output_name = ['Output'])
+
+        self.assertIsNone(obj.getInputsNames())
+        self.assertIsNone(obj.getOutputsNames())
+
 if __name__ == '__main__':
     unittest.main()
     
